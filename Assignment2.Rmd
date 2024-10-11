@@ -156,6 +156,113 @@ Task 2.a
 ```{r}
 #Put your Code here
 
+#loading dirty_iris.csv data
+dirty_iris <- read.csv("dirty_iris.csv", header=TRUE)
+dirty_iris
+
+#gives the dimension of the dataset
+dim(dirty_iris)
+
+```
+```{r}
+#Print  Missing Values details
+sapply(dirty_iris, function(x) sum(is.na(x)))
+```
+
+
+
+```{r}
+# sapply() applies the sum function to each column in the dataframe to count empty strings
+empty_strings <- sapply(dirty_iris, function(x) sum(x == "", na.rm = TRUE))
+empty_strings
+```
+
+```{r}
+# Replacing all empty strings in the Species column with NA
+dirty_iris$Species[dirty_iris$Species == ""] <- NA
+
+#Checking again if empty strings exists or not
+sum(dirty_iris$Species== "", na.rm=TRUE)
+
+#Checking number of NAs again
+sapply(dirty_iris, function(x) sum(is.na(x)))
+
+#displaying data types of the columns
+sapply(dirty_iris, class)
+```
+```{r}
+#Finding the indices of missing values(NA) in Petal.Length and Species feature
+ind1 <- which(is.na(dirty_iris$Petal.Length))
+ind1
+ind2 <- which(is.na(dirty_iris$Species)) 
+ind2
+
+```
+```{r}
+#Displays the full rows of missing values(NA) from Petal.length
+
+ind1
+dirty_iris[ind1, ]
+
+#Excluding specific rows (ind1) from the dirty_iris to display a cleaned dataset only
+dirty_iris[-ind1, ]
+
+#Displays the full rows of missing values(NA) from Species column
+ind2
+dirty_iris[ind2, ]
+
+# Excluding specific rows (ind2) from the dirty_iris to display a cleaned dataset only
+dirty_iris[-ind2, ]
+```
+```{r}
+#Displaying statistical information about the dataset
+summary(dirty_iris)
+```
+```{r}
+# colMeans() function returns the ratio of NAs for each column
+print(colMeans(is.na(dirty_iris))*100 )
+
+```
+```{r}
+# Create a new dataset that identifies whether values are missing (TRUE/FALSE)
+missing_data <- dirty_iris %>%
+  mutate_all(~ ifelse(is.na(.), "Missing", "Not Missing")) %>%
+  gather(key = "Feature", value = "MissingStatus")
+
+# View the transformed data
+head(missing_data)
+
+
+
+```
+```{r}
+# Create a bar plot to show the distribution of missing vs. not missing values per feature
+ggplot(missing_data, aes(x = Feature, fill = MissingStatus)) +
+  geom_bar() +
+  labs(title = "Missing vs Non-Missing Values by Feature",
+       x = "Features",
+       y = "Count",
+       fill = "Missing Status") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+# Load ggplot2 package if not already
+library(ggplot2)
+
+# Create a histogram with density plot
+ggplot(dirty_iris, aes(x = Petal.Length)) +
+  geom_histogram(aes(y = ..density..), bins = 20, fill = "lightblue", color = "black") +
+  geom_density(color = "red", size = 1) +
+  labs(title = "Histogram and Density Plot ",
+       x = "Petal.Length",
+       y = "Density") +
+  theme_minimal()
+
+```
+```{r}
+write.csv(dirty_iris, "dirty_iris_miss.csv", row.names = FALSE)
 ```
 
 ```{r}
@@ -165,10 +272,55 @@ print(paste("Word Count: ",word_count(str)))
 ```
 
 Task 2.b
+
 ```{r}
 #Put your Code here
 
+dat <- read.csv("dirty_iris_miss.csv")
+
+#Replace Missing vlauses in Sepal.Length by median value
+#ind1 is the indices of missing values of Petal.length
+media<- median(dat$Petal.Length[-ind1])
+print(paste("median:",media))
+dat$Petal.Length[ind1] <- media
+dat[ind1, ]
 ```
+
+```{r}
+# Statistical summary for clean data and imputed data
+dirty_summary <- summary(dirty_iris$Petal.Length)
+imputed_summary <- summary(dat$Petal.Length)
+
+# Standard deviation and Variance
+dirty_sd <- sd(dirty_iris$Petal.Length,na.rm = TRUE)
+dirty_var <- var(dirty_iris$Petal.Length,na.rm = TRUE)
+imputed_sd <- sd(dat$Petal.Length)
+imputed_var <- var(dat$Petal.Length)
+
+# Display statistical summary of clean and imputed data
+print("Statistical info of Petal.Length")
+cat("Dirty dataset summary:\n")
+print(dirty_summary)
+cat("Imputed summary:\n")
+print(imputed_summary)
+
+# Display sd and variances
+print(paste("Dirty Data SD:", dirty_sd))
+print(paste("Imputed Data SD:", imputed_sd))
+print(paste("Dirty Data Variance:", dirty_var))
+print(paste("Imputed Data Variance:", imputed_var))
+
+
+
+```
+```{r}
+#Graphical Comparision
+ggplot(dirty_iris, aes(x = Petal.Length)) +
+  geom_histogram(binwidth = 0.2,color = "red") +
+  labs(title = "Histogram of Petal Length", x = "Petal Length", y = "Count")
+```
+
+
 
 ```{r}
 #Put your explanation here for 2.b
@@ -179,6 +331,23 @@ print(paste("Word Count: ",word_count(str)))
 Task 2.c
 ```{r}
 #Put your Code here
+
+##  Replace Missing vlauses in  Species by median value
+
+
+
+ind_species <- which(is.na(dat$Species))
+ind
+kk<-as.numeric(dat$Species[-ind])
+
+kk
+mod<- mode(dat$Species[-ind])
+
+
+
+dat$Species[ind] <- mod
+
+
 
 ```
 
