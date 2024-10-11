@@ -313,13 +313,49 @@ print(paste("Imputed Data Variance:", imputed_var))
 
 
 ```
-```{r}
-#Graphical Comparision
-ggplot(dirty_iris, aes(x = Petal.Length)) +
-  geom_histogram(binwidth = 0.2,color = "red") +
-  labs(title = "Histogram of Petal Length", x = "Petal Length", y = "Count")
-```
 
+```{r}
+#Histogram: Petal.Length
+#Mean of Petal.length of both datasets
+mean_dirty<- mean(dirty_iris$Petal.Length, na.rm = TRUE)
+mean_dat <- mean(dat$Petal.Length, na.rm = TRUE)
+
+
+#Histogram to compare Petal.length in both datasets with mean lines
+ggplot() +
+  geom_histogram(data = dirty_iris, aes(x = Petal.Length, fill = "Dirty"), 
+                 bins = 20, alpha = 0.9) +
+  geom_histogram(data = dat, aes(x = Petal.Length, fill = "Imputed"), 
+                 bins = 20, alpha = 0.3) +
+  geom_vline(aes(xintercept = mean_dirty, color = "Dirty"), 
+             linetype = "dashed", size = 1) +
+  geom_vline(aes(xintercept = mean_dat, color = "Imputed"), 
+             linetype = "dashed", size = 1) +
+  labs(title = "Comparison of Petal Length",
+       x = "Petal Length",
+       y = "Frequency") +
+  scale_fill_manual(name = "Dataset", values = c("Dirty" = "grey", "Imputed" = "lightblue")) +
+  scale_color_manual(name = "Mean", values = c("Dirty" = "blue", "Imputed" = "orange")) +
+  theme_minimal()
+```
+```{r}
+#Boxplot:Petal.length
+
+#Combine datasets for comparisiom
+dirty_iris$Dataset <- "Dirty"
+dat$Dataset <- "Imputed"
+combined_data <- rbind(dirty_iris, dat)
+
+#Creating a box plot to compare Petal.length in both datasetsa
+ggplot(combined_data, aes(x = Dataset, y = Petal.Length, fill = Dataset)) +
+  geom_boxplot(alpha = 0.6) + 
+  labs(title = "Comparison of Petal Length",
+       x = "Dataset",
+       y = "Petal Length") +
+  scale_fill_manual(values = c("Dirty" = "grey", "Imputed" = "lightblue")) +
+  theme_minimal()
+
+```
 
 
 ```{r}
@@ -336,7 +372,7 @@ Task 2.c
 
 
 
-ind_species <- which(is.na(dat$Species))
+ind <- which(is.na(dat$Species))
 ind
 kk<-as.numeric(dat$Species[-ind])
 
