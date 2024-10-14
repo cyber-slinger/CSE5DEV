@@ -18,7 +18,6 @@ dir=getwd()
 
 Set your working  directory in R using **setwd ()** function
 
-
 ```{r}
 setwd(dir)
 ```
@@ -32,24 +31,24 @@ word_count <- function(s)
 ```
 
 ## Task 1
-[ChatGPT url](https://chatgpt.com/share/xxxxxxxx)
+[ChatGPT url](https://chatgpt.com/share/67032791-1d7c-8012-bf31-0cc5cdfbeb64)
 
 
-**Without the valid link, your Task1 will be marked <50%**
+**Valid link**
 
 Task 1.a <br>
 ![Image Caption](task1_df.png)
+R code to produce the correct dataframe 
 ```{r}
-#Put your R code to produce the correct dataframe here
 
-# load CSV into  data frame
+# load CSV into  data frame called df
 df <- read.csv("Studentmarks.csv")
 
 # Checking the structure of the dataframe df
 str(df)
 
 # Converting the dob column into a date object
-df$dob <- as.Date(df$dob, format = "%d/%m/%Y")  # Adjust the format as needed
+df$dob <- as.Date(df$dob, format = "%d/%m/%Y")  
 
 # Checking the structure of the dataframe again to confirm the conversion
 str(df)
@@ -89,29 +88,27 @@ colnames(df)[which(names(df) == "day")] <- "date"
 #view updated df
 print(df)
 
-#reorder the columns
+#reordering the columns
 df <- df[, c("StudentID","Studentname","date","month","year","X2020","X2021","X2022","age1","age2")]
 
 #view updated df
 print(df)
 
-#
 ```
-
+Task 1.a: My own words to explain how the code works.
 ```{r}
-#Use your own words to explain how the code works.
-str<-"Your logical Explanation for 1.a"
+str<-" I imported a CSV file containing student marks into a dataframe named df. Since the dob column was initially in character format, I converted it to the date data type and calculated each student's age based on their date of birth. To find the age, l used the difftime function to determine the difference in days between the current date ( Sys. Date () ) and the dob. The calculated age is stored in a new column called age1. Additionally, I extracted the current year from Sys.Date() to compute age2, representing the age in years only.I removed the dob column from the dataframe.To rename the day column to date, I used the colnames function, and finally, I specified the order of the columns using the c() function to ensure they are arranged as desired."
 print(paste("Word Count: ",word_count(str)))
 ```
 
 Task 1.b
 ![Image Caption](task1b.png)
+R code to produce the correct chart here
 ```{r}
-#Put your R code to produce the correct chart here
-# Load ggplot2 library
+# Loading ggplot2 library for plotting 
 library(ggplot2)
 
-# Create scatter plot with labels and color legend title
+#Create scatter plot with labels and color legend title
 ggplot(df) +
   geom_point(aes(x = X2020, y = Studentname, color = "X2020")) +
   geom_point(aes(x = X2021, y = Studentname, color = "X2021")) +
@@ -120,42 +117,40 @@ ggplot(df) +
 
 ```
 
+Task 1.b : My own words to explain how the code works.
 ```{r}
-#Use your own words to explain how the code works.
-str<-"Your logical Explanation for 1.b"
+str<-"I am using the ggplot library to make a scatter plot. The geom_point function adds points to the plot based on the values from different columns. Here, I use geom_point three times to show data for the years X2020, X2021, and X2022, each in a different color for easy identification."
 print(paste("Word Count: ",word_count(str)))
 ```
 
 Task 1.c
 ![Image Caption](task1c.png)
+R code to produce the correct chart here
 ```{r}
-#Put your R code to produce the correct chart here
-# Load necessary libraries
+#library used for data manipulation and transformation like filter and mutate
 library(dplyr)
-library(ggplot2)
 
 df %>%
-  mutate(total_marks = X2020 + X2021 + X2022) %>%
-  filter(total_marks >= 200) %>%
+  mutate(total_marks = X2020 + X2021 + X2022) %>% #mutate function for creating a column 
+  filter(total_marks >= 200) %>% #filter function to filter data and store in a same column 
   ggplot(aes(x = reorder(Studentname, -total_marks), y = total_marks)) +
-  geom_bar(stat = "identity") +
+  geom_bar(stat = "identity") + #height of barchart with actual number 
   labs(x = "Students Name", y = "Total Marks", title = "Total Marks of Students (>=200) - Descending Order")
 
 
 ```
-
+Task 1.c: My own words to explain how the code works.
 ```{r}
-#Use your own words to explain how the code works.
-str<-"Your logical Explanation for 1.c"
+#Use your own words to explain how the code works for 1.c
+str<-"First marks from columns X2020, X2021 and X2022 is added into a new column called total_marks using the mutate function in dataframe called df. Filter function filters the data from total_column with value greater or equal to 200. Then geom_bar is used to produced bar diagram. reorder function reordes the Studentname variable based on values of totalmarks(descending) indidicated by negative sign.labs function is used for correct labeling of axis and title.  "
 print(paste("Word Count: ",word_count(str)))
 ```
 
 ## Task 2
 
 Task 2.a
+Loading dataset and observe rows and column
 ```{r}
-#Put your Code here
-
 #loading dirty_iris.csv data
 dirty_iris <- read.csv("dirty_iris.csv", header=TRUE)
 dirty_iris
@@ -163,21 +158,13 @@ dirty_iris
 #gives the dimension of the dataset
 dim(dirty_iris)
 
-```
-```{r}
 #Print  Missing Values details
 sapply(dirty_iris, function(x) sum(is.na(x)))
-```
 
-
-
-```{r}
 # sapply() applies the sum function to each column in the dataframe to count empty strings
 empty_strings <- sapply(dirty_iris, function(x) sum(x == "", na.rm = TRUE))
 empty_strings
-```
 
-```{r}
 # Replacing all empty strings in the Species column with NA
 dirty_iris$Species[dirty_iris$Species == ""] <- NA
 
@@ -189,162 +176,107 @@ sapply(dirty_iris, function(x) sum(is.na(x)))
 
 #displaying data types of the columns
 sapply(dirty_iris, class)
-```
-```{r}
-#Finding the indices of missing values(NA) in Petal.Length and Species feature
-ind1 <- which(is.na(dirty_iris$Petal.Length))
-ind1
-ind2 <- which(is.na(dirty_iris$Species)) 
-ind2
 
-```
-```{r}
-#Displays the full rows of missing values(NA) from Petal.length
-
-ind1
-dirty_iris[ind1, ]
-
-#Excluding specific rows (ind1) from the dirty_iris to display a cleaned dataset only
-dirty_iris[-ind1, ]
-
-#Displays the full rows of missing values(NA) from Species column
-ind2
-dirty_iris[ind2, ]
-
-# Excluding specific rows (ind2) from the dirty_iris to display a cleaned dataset only
-dirty_iris[-ind2, ]
-```
-```{r}
 #Displaying statistical information about the dataset
 summary(dirty_iris)
-```
-```{r}
+
 # colMeans() function returns the ratio of NAs for each column
 print(colMeans(is.na(dirty_iris))*100 )
-
 ```
+Observing histogram, mean and median to decide the imputation on missing values
 ```{r}
-# Create a new dataset that identifies whether values are missing (TRUE/FALSE)
-missing_data <- dirty_iris %>%
-  mutate_all(~ ifelse(is.na(.), "Missing", "Not Missing")) %>%
-  gather(key = "Feature", value = "MissingStatus")
+ggplot() + # function for plotting any graph using ggplot2 library
+  geom_histogram(data=dirty_iris, aes(x = Petal.Length, fill = "DIRTY DATA"), #creates histogram
+                 bins = 20, alpha = 0.7, na.rm=TRUE)
 
-# View the transformed data
-head(missing_data)
-
-
-
-```
-```{r}
-# Create a bar plot to show the distribution of missing vs. not missing values per feature
-ggplot(missing_data, aes(x = Feature, fill = MissingStatus)) +
-  geom_bar() +
-  labs(title = "Missing vs Non-Missing Values by Feature",
-       x = "Features",
-       y = "Count",
-       fill = "Missing Status") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-```
-```{r}
-# Load ggplot2 package if not already
-library(ggplot2)
-
-# Create a histogram with density plot
-ggplot(dirty_iris, aes(x = Petal.Length)) +
-  geom_histogram(aes(y = ..density..), bins = 20, fill = "lightblue", color = "black") +
-  geom_density(color = "red", size = 1) +
-  labs(title = "Histogram and Density Plot ",
-       x = "Petal.Length",
-       y = "Density") +
-  theme_minimal()
-
-```
-```{r}
-write.csv(dirty_iris, "dirty_iris_miss.csv", row.names = FALSE)
+# mean and median function 
+print(mean(dirty_iris$Petal.Length, na.rm=TRUE))
+print(median(dirty_iris$Petal.Length, na.rm=TRUE))
 ```
 
+Task 2.a: My explanation
 ```{r}
-#Put your explanation here
-str<-"Your logical Explanation for 2.a"
+str<-"I plan to replace the missing values in the Petal.Length column with the median because the data isn't normally distributed. The histograms show that Petal.Length is skewed to the left, which makes the mean shift in that direction. The median, however, stays near the center of the data and isn't as affected by the skew. "
+
 print(paste("Word Count: ",word_count(str)))
 ```
 
 Task 2.b
-
+Implementing Median Imputation
 ```{r}
 #Put your Code here
+#Finding the indices of missing values(NA) in Petal.Length and Species feature
+ind1 <- which(is.na(dirty_iris$Petal.Length))
+ind1
 
-dat <- read.csv("dirty_iris_miss.csv")
+#Copying data frame to new name 'dat'
+dat <- dirty_iris
 
-#Replace Missing vlauses in Sepal.Length by median value
+#Replace Missing values in Sepal.Length by median value
 #ind1 is the indices of missing values of Petal.length
 media<- median(dat$Petal.Length[-ind1])
 print(paste("median:",media))
 dat$Petal.Length[ind1] <- media
 dat[ind1, ]
 ```
-
+Statistical info of Petal.Length of original(clean) and recovered(imputed) dataseta
 ```{r}
-# Statistical summary for clean data and imputed data
-dirty_summary <- summary(dirty_iris$Petal.Length)
-imputed_summary <- summary(dat$Petal.Length)
+#Loading original dataset
+original <- read.csv("iris.csv")
+
+# Statistical summary for original(clean) data and recovered(imputed) data
+original_summary <- summary(original$Petal.Length)
+recovered_summary <- summary(dat$Petal.Length)
 
 # Standard deviation and Variance
-dirty_sd <- sd(dirty_iris$Petal.Length,na.rm = TRUE)
-dirty_var <- var(dirty_iris$Petal.Length,na.rm = TRUE)
-imputed_sd <- sd(dat$Petal.Length)
-imputed_var <- var(dat$Petal.Length)
+original_sd <- sd(original$Petal.Length,na.rm = TRUE)
+original_var <- var(original$Petal.Length,na.rm = TRUE)
+recovered_sd <- sd(dat$Petal.Length)
+recovered_var <- var(dat$Petal.Length)
 
-# Display statistical summary of clean and imputed data
+# Display statistical summary of original and recovered data
 print("Statistical info of Petal.Length")
-cat("Dirty dataset summary:\n")
-print(dirty_summary)
-cat("Imputed summary:\n")
-print(imputed_summary)
+cat("Original dataset summary:\n")
+print(original_summary)
+cat("Recovered dataset summary:\n")
+print(recovered_summary)
 
 # Display sd and variances
-print(paste("Dirty Data SD:", dirty_sd))
-print(paste("Imputed Data SD:", imputed_sd))
-print(paste("Dirty Data Variance:", dirty_var))
-print(paste("Imputed Data Variance:", imputed_var))
-
-
-
+print(paste("Original Data SD:", original_sd))
+print(paste("Recovered Data SD:", recovered_sd))
+print(paste("Original Data Variance:", original_var))
+print(paste("Recovered Data Variance:", recovered_var))
 ```
-
+Histogram: Petal.Length
 ```{r}
-#Histogram: Petal.Length
 #Mean of Petal.length of both datasets
-mean_dirty<- mean(dirty_iris$Petal.Length, na.rm = TRUE)
-mean_dat <- mean(dat$Petal.Length, na.rm = TRUE)
+mean_original<- mean(original$Petal.Length, na.rm = TRUE)
+mean_recovered <- mean(dat$Petal.Length, na.rm = TRUE)
 
 
 #Histogram to compare Petal.length in both datasets with mean lines
 ggplot() +
-  geom_histogram(data = dirty_iris, aes(x = Petal.Length, fill = "Dirty"), 
+  geom_histogram(data = original, aes(x = Petal.Length, fill = "Original"), 
                  bins = 20, alpha = 0.9) +
-  geom_histogram(data = dat, aes(x = Petal.Length, fill = "Imputed"), 
+  geom_histogram(data = dat, aes(x = Petal.Length, fill = "Recovered"), 
                  bins = 20, alpha = 0.3) +
-  geom_vline(aes(xintercept = mean_dirty, color = "Dirty"), 
+  geom_vline(aes(xintercept = mean_original, color = "Original"), #creates a line 
              linetype = "dashed", size = 1) +
-  geom_vline(aes(xintercept = mean_dat, color = "Imputed"), 
+  geom_vline(aes(xintercept = mean_recovered, color = "Recovered"), 
              linetype = "dashed", size = 1) +
   labs(title = "Comparison of Petal Length",
        x = "Petal Length",
        y = "Frequency") +
-  scale_fill_manual(name = "Dataset", values = c("Dirty" = "grey", "Imputed" = "lightblue")) +
-  scale_color_manual(name = "Mean", values = c("Dirty" = "blue", "Imputed" = "orange")) +
-  theme_minimal()
-```
-```{r}
-#Boxplot:Petal.length
+  #function to customize fill colors of geom histogram and vline
+  scale_fill_manual(name = "Dataset", values = c("Original" = "grey", "Recovered" = "lightblue")) 
 
+```
+Boxplot:Petal.length
+```{r}
 #Combine datasets for comparisiom
-dirty_iris$Dataset <- "Dirty"
-dat$Dataset <- "Imputed"
-combined_data <- rbind(dirty_iris, dat)
+original$Dataset <- "Original"
+dat$Dataset <- "Recovered"
+combined_data <- rbind(original, dat)
 
 #Creating a box plot to compare Petal.length in both datasetsa
 ggplot(combined_data, aes(x = Dataset, y = Petal.Length, fill = Dataset)) +
@@ -352,60 +284,209 @@ ggplot(combined_data, aes(x = Dataset, y = Petal.Length, fill = Dataset)) +
   labs(title = "Comparison of Petal Length",
        x = "Dataset",
        y = "Petal Length") +
-  scale_fill_manual(values = c("Dirty" = "grey", "Imputed" = "lightblue")) +
-  theme_minimal()
+  scale_fill_manual(values = c("Original" = "grey", "Recovered" = "lightblue")) 
 
 ```
-
-
+Density Plot: Petal.Length
 ```{r}
-#Put your explanation here for 2.b
-str<-"Your logical Explanation"
+
+# Create a density plot to compare Petal.length in both datasets
+ggplot(combined_data, aes(x = Petal.Length, fill = Dataset)) +
+  geom_density(alpha = 0.7) + 
+  geom_vline(aes(xintercept = mean_original, color = "Original"), 
+             linetype = "dashed", size = 1) +
+  geom_vline(aes(xintercept = mean_recovered, color = "Recovered"), 
+             linetype = "dashed", size = 1) +
+  labs(title = "Density Comparison of Petal Length",
+       x = "Petal Length",
+       y = "Density") +
+  scale_fill_manual(values = c("Original" = "grey", "Recovered" = "lightblue")) 
+
+
+```
+Task 2.b: My explanation
+```{r}
+str<-"There is a slight difference in the mean, standard deviation, and variance of Petal Length between the original and recovered datasets. The histogram shows that more Petal
+Length values are now clustered around the center. When we replaced missing values with the median and created a box plot, it didn't provide much useful information.Both the histogram and density plot indicate that the missing values were mostly lower Petal Lengths, which are skewed to the left. However, the density plot of the recovered dataset shows more values concentrated higher up, leading to an increase in the median Petal Length resulting overestimation of central tendency."
 print(paste("Word Count: ",word_count(str)))
 ```
 
 Task 2.c
+
+Replace Missing vlaues in  Species by mode(most frequent observed value)
 ```{r}
-#Put your Code here
-
-##  Replace Missing vlauses in  Species by median value
-
-
-
+#identifying indices of missing values in Species column
 ind <- which(is.na(dat$Species))
 ind
-kk<-as.numeric(dat$Species[-ind])
 
-kk
-mod<- mode(dat$Species[-ind])
-
-
-
+#Calculating mode of Species column which is most frequently observed value
+Modea <- function(x) {
+ux <- unique(x)
+tab <- tabulate(match(x, ux))
+ux[tab == max(tab)]
+}
+mod<- Modea(dat$Species[-ind])
 dat$Species[ind] <- mod
 
+any(is.na(dat$Species))
+sum(dat$Species == "")
+sum(dat$Species %in% c("NA", "N/A"))
 
+```
+Statistical Comparision on Species for both datasets
+Summary statistics for each species of recovered dataset
+```{r}
+# Frequency for Species column of recovered dataset
+print(table(dat$Species))
+
+# Frequency for Species column of original dataset
+print(table(original$Species))
+
+#summary statistics for each species of recovered dataset
+summary_stats <- dat %>%
+  group_by(Species) %>%
+  summarise(
+    Min_Petal_Width = min(Petal.Width, na.rm = TRUE),
+    Max_Petal_Width = max(Petal.Width, na.rm = TRUE),
+    Mean_Petal_Width = mean(Petal.Width, na.rm = TRUE),
+    Median_Petal_Width = median(Petal.Width, na.rm = TRUE),
+    
+    Min_Petal_Length = min(Petal.Length, na.rm = TRUE),
+    Max_Petal_Length = max(Petal.Length, na.rm = TRUE),
+    Mean_Petal_Length = mean(Petal.Length, na.rm = TRUE),
+    Median_Petal_Length = median(Petal.Length, na.rm = TRUE),
+    
+    Min_Sepal_Width = min(Sepal.Width, na.rm = TRUE),
+    Max_Sepal_Width = max(Sepal.Width, na.rm = TRUE),
+    Mean_Sepal_Width = mean(Sepal.Width, na.rm = TRUE),
+    Median_Sepal_Width = median(Sepal.Width, na.rm = TRUE),
+    
+    Min_Sepal_Length = min(Sepal.Length, na.rm = TRUE),
+    Max_Sepal_Length = max(Sepal.Length, na.rm = TRUE),
+    Mean_Sepal_Length = mean(Sepal.Length, na.rm = TRUE),
+    Median_Sepal_Length = median(Sepal.Length, na.rm = TRUE)
+  )
+
+# Print the summary statistics
+print(summary_stats)
+```
+Summary statistics for each species of original dataset
+```{r}
+#summary statistics for each species of original dataset
+summary_stats2 <- original %>%
+  group_by(Species) %>%
+  summarise(
+    Min_Petal_Width = min(Petal.Width, na.rm = TRUE),
+    Max_Petal_Width = max(Petal.Width, na.rm = TRUE),
+    Mean_Petal_Width = mean(Petal.Width, na.rm = TRUE),
+    Median_Petal_Width = median(Petal.Width, na.rm = TRUE),
+    
+    Min_Petal_Length = min(Petal.Length, na.rm = TRUE),
+    Max_Petal_Length = max(Petal.Length, na.rm = TRUE),
+    Mean_Petal_Length = mean(Petal.Length, na.rm = TRUE),
+    Median_Petal_Length = median(Petal.Length, na.rm = TRUE),
+    
+    Min_Sepal_Width = min(Sepal.Width, na.rm = TRUE),
+    Max_Sepal_Width = max(Sepal.Width, na.rm = TRUE),
+    Mean_Sepal_Width = mean(Sepal.Width, na.rm = TRUE),
+    Median_Sepal_Width = median(Sepal.Width, na.rm = TRUE),
+    
+    Min_Sepal_Length = min(Sepal.Length, na.rm = TRUE),
+    Max_Sepal_Length = max(Sepal.Length, na.rm = TRUE),
+    Mean_Sepal_Length = mean(Sepal.Length, na.rm = TRUE),
+    Median_Sepal_Length = median(Sepal.Length, na.rm = TRUE)
+  )
+
+# Print the summary statistics
+print(summary_stats2)
+
+```
+#Box plot for Petal.Length comparing both datasets
+```{r}
+ggplot(combined_data, aes(x = Species, y = Petal.Length, fill = Dataset)) +
+  geom_boxplot(alpha = 0.6) + #for plotting boxplot
+  labs(title = "Boxplot of Petal Length by Species and Dataset",
+       x = "Species",
+       y = "Petal Length")
+```
+#Box plot for Petal.Width comparing both datasets
+```{r}
+ggplot(combined_data, aes(x = Species, y = Petal.Width, fill = Dataset)) +
+  geom_boxplot(alpha = 0.6) + 
+  labs(title = "Boxplot of Petal Width by Species and Dataset",
+       x = "Species",
+       y = "Petal Width")
+```
+#Box plot for Sepal.Length comparing both datasets
+```{r}
+ggplot(combined_data, aes(x = Species, y = Sepal.Length, fill = Dataset)) +
+  geom_boxplot(alpha = 0.6) + 
+  labs(title = "Boxplot of Sepal Length by Species and Dataset",
+       x = "Species",
+       y = "Sepal Length")
+```
+#Box plot for Sepal.Width comparing both datasets
+```{r}
+ggplot(combined_data, aes(x = Species, y = Sepal.Width, fill = Dataset)) +
+  geom_boxplot(alpha = 0.6) +  # Dodges boxplots for better visibility
+  labs(title = "Boxplot of Sepal Width by Species and Dataset",
+       x = "Species",
+       y = "Sepal Width")
 
 ```
 
+Bar plot for Species counts for original dataset
 ```{r}
-#Put your explanation here for 2.c
-str<-"Your logical Explanation for 2.c"
+ggplot(original, aes(x = Species, fill = Species)) +
+  geom_bar(alpha = 0.9) +
+  labs(title = "Count of Species in Original Dataset",
+       x = "Species",
+       y = "Frequency")
+```
+Bar plot for Species counts for recovered dataset
+```{r}
+ggplot(dat, aes(x = Species, fill = Species)) +
+  geom_bar(alpha = 0.8) +
+  labs(title = "Count of Species in Dataset",
+       x = "Species",
+       y = "Frequency")
+
+```
+
+Task 2.c : My explanation
+```{r}
+str<-"In the recovered dataset, the number of Virginica species appears to have increased because it was the most frequent species in the dirty_iris dataset. However, this leads to bias, as replacing missing values with the mode distorts the species distribution.
+Comparing the recovered (imputed) and original datasets across all features reveals changes in the range of values for Sepal Length, Petal Length, and Sepal Width, while Petal Width remains unchanged. This misrepresentation could cause incorrect classification of widths or lengths as belonging to the Virginica species. "
 print(paste("Word Count: ",word_count(str)))
 ```
 
 Task 2.d
+Bivariate analysisa
 ```{r}
-#Put your Code here
+# Bivariate scatter plot for the original dataset with species-colored points
+ggplot(original, aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Bivariate Analysis of Petal Dimensions (Original Dataset)",
+       x = "Petal Length",
+       y = "Petal Width") +
+  scale_color_manual(values = c("setosa" ="red", "versicolor" = "orange", "virginica" = "blue"))
 
+# Bivariate scatter plot for the modified dataset with species-colored points
+ggplot(dat, aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Bivariate Analysis of Petal Dimensions (Modified Dataset)",
+       x = "Petal Length",
+       y = "Petal Width") +
+  scale_color_manual(values = c("setosa" = "red", "versicolor" = "orange", "virginica" = "blue")) 
 
 ```
 
+Task 2.d: My explanation
 ```{r}
-#Put your explanation here for 2.d
-str<-"Your logical Explanation for 2.d"
-print(paste("Word Count: ",word_count(str)))
+str<-"Evaluating Petal length and evaluating petal width with Species help distinguished classes in iris dataset as Petal with lower width and length are clustered in lower-left corner which is true to be Species of setosa, whereas higher length and width are clustered slighly more around top-right corner belongs to virginica class and between these values belongs to veriscolor species.From the cluster we can identify . Replacing missing valuews with median in petal length and mode in species  seems to introduce some outliers which is Virginica point in Setosa cluster.Despite the variation seen in recovered dataset the linear relationship between petal length and petal width persists in both data sets."
+print(paste("Word Count:",word_count(str)))
 ```
-
+My declaration:
 ```{r}
 sign <- TRUE
 print(paste("I confirm that the work submitted is my own and has been completed without assistance or collaboration with others. I understand that submitting work that is not my own may result in academic misconduct.",sign))
